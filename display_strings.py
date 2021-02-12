@@ -17,7 +17,7 @@ Choose an option from the main menu:
 ------------------------------------
 1. Issue a book to the student
 2. Student returning a book
-3. Display all issued books
+3. Display issue history
 4. Display students past due date
 5. Book management
 6. Student management

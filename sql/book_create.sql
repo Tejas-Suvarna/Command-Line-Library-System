@@ -1,7 +1,7 @@
 CREATE TABLE book (
-	bid VARCHAR(7) NOT NULL AUTO_INCREMENT ,
+	book_id VARCHAR(7) NOT NULL AUTO_INCREMENT , -- Unique book_id that is auto-generated and auto-incremented
 	title VARCHAR(100) NOT NULL ,
 	author VARCHAR(40) ,
 	published_year VARCHAR(4) ,
-    PRIMARY KEY(bid) 
+    PRIMARY KEY(book_id) -- book_id is made the primary key
 );

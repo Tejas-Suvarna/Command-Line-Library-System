@@ -1,0 +1,7 @@
+CREATE TABLE student (
+	sid VARCHAR(5) NOT NULL AUTO_INCREMENT ,
+	full_name VARCHAR(40) NOT NULL ,
+	class VARCHAR(2) NOT NULL ,
+	dob VARCHAR(10) NOT NULL ,
+    PRIMARY KEY(sid) 
+);

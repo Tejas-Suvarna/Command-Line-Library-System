@@ -2,7 +2,9 @@ import time # Used for the sleep function while exiting the program
 
 import sql_connection
 import display_strings # Contains string variables with multiline text
+
 import student
+import book
 
 
 menu_choice_number = '' # The user choice in the main menu
@@ -34,8 +36,7 @@ while(exit_status == False):
         #func4()
 
     elif (menu_choice_number.strip() == '5'):
-        pass
-        #func5()
+        book.book_menu(sql_connection.mycursor, sql_connection.mydb)
 
     elif (menu_choice_number.strip() == '6'):
         student.student_menu(sql_connection.mycursor, sql_connection.mydb)

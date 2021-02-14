@@ -11,7 +11,7 @@ def is_student_data_correct(student_data):
     # Student name validation
     # Checks the length of the student full_name
     if (len(student_name) > 40 or len(student_name) == 0):
-        print('Please enter a name with 40 characters. ')
+        print('Please enter a name with at least 1 to 40 characters. ')
         return False
 
     # Checks if student name contains characters other than alphabets, spaces and periods
@@ -46,7 +46,6 @@ def is_student_data_correct(student_data):
         datetime.datetime.strptime(student_dob, '%d-%m-%Y')
     except ValueError:
         print('Please enter data in the format (dd-mm-yyyy)')
-    
 
     return True # The data is correct
 
@@ -70,10 +69,11 @@ def student_menu(mycursor, mydb):
         display_all_students(dbcursor, db) # Function to display all students from database
 
     elif (student_menu_choice_number.strip() == '4'):
-        return
+        return # Does not do anything. Returns to main menu
 
     else:
         print('Invalid option selected.\n')
+        _ = input(display_strings.hit_enter_text) # This helps to persist the output for the user to see
 
 
 # This function inserts a new student and the details into the database
@@ -85,8 +85,11 @@ def create_student(mycursor, mydb): # The function receives the database cursor 
     student_class = input('Enter the class of the student (1,2,...,10,11,12): ')
     student_dob = input('Enter the date of birth of the student (dd-mm-yyyy): ')
 
+    # Trim student data
+    student_name, student_class, student_dob = student_name.strip(), student_class.strip(), student_dob.strip()
+
     # Check student data
-    student_data = (student_name.strip(), student_class.strip(), student_dob.strip()) # Pack the student data into a tuple
+    student_data = (student_name, student_class, student_dob) # Pack the student data into a tuple
 
     if not is_student_data_correct(student_data):
         print('Check the data you\'ve entered.')
@@ -95,7 +98,7 @@ def create_student(mycursor, mydb): # The function receives the database cursor 
     
     # Inserts details to database
     insert_student_query = "INSERT INTO student (full_name, class, dob) VALUES (%s, %s, %s)"
-    val = (student_name.strip(), student_class.strip(), student_dob.strip())
+    val = (student_name, student_class, student_dob)
     mycursor.execute(insert_student_query, val)
     print(mycursor.rowcount, "record inserted.")
 
@@ -109,6 +112,7 @@ def create_student(mycursor, mydb): # The function receives the database cursor 
 
     _ = input(display_strings.hit_enter_text) # This helps to persist the output for the user to see
 
+# Deletes a student which has a student ID specified by user
 def delete_student(mycursor, mydb):
 
     all_student_ids = []
@@ -119,12 +123,11 @@ def delete_student(mycursor, mydb):
     # Fetches all student IDs for validation
     get_student_ids_query = 'SELECT student_id FROM student;'
     mycursor.execute(get_student_ids_query)
-    myresult = mycursor.fetchall()
+    result_student_ids = mycursor.fetchall()
 
     # Stores all student IDs in a list
-    for x in myresult:
-        all_student_ids.append(x[0])
-
+    for id in result_student_ids:
+        all_student_ids.append(id[0])
 
     # Validation of the user entered student ID
     if (not student_id_to_delete.isnumeric()):
@@ -145,6 +148,7 @@ def delete_student(mycursor, mydb):
     mydb.commit() # Saves all changes to database
 
     _ = input(display_strings.hit_enter_text) # This helps to persist the output for the user to see
+
 
 # Displays all students from database
 def display_all_students(mycursor, mydb):

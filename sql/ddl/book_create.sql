@@ -1,5 +1,5 @@
-DROP TABLE IF EXIST book;
-CREATE TABLE book (
+DROP TABLE IF EXIST school.book;
+CREATE TABLE school.book (
 	book_id INTEGER NOT NULL AUTO_INCREMENT , -- Unique book_id that is auto-generated and auto-incremented
 	title VARCHAR(100) NOT NULL ,
 	author VARCHAR(40) ,

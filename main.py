@@ -1,13 +1,9 @@
-import time # Used for the sleep function while exiting the program
-
-import sql_connection
-import display_strings # Contains string variables with multiline text
+import sql_connection # File used to establish connection with the SQL database
+import display_strings  # Contains string variables with multiline text
 
 import student
 import book
 
-
-menu_choice_number = '' # The user choice in the main menu
 exit_status = False # Flag indicating if user chose to exit
 
 print(display_strings.welcome_message) # Displays the ASCII pattern text - "Library system"
@@ -17,39 +13,34 @@ print(display_strings.welcome_message) # Displays the ASCII pattern text - "Libr
 while(exit_status == False):
 
     print(display_strings.main_menu_text) # Prints the main menu options text
-    menu_choice_number = input('Enter your choice: ') # Stores the user choice
+    menu_choice_number = input('Enter your choice: ').strip() # Stores the user choice, strip() removes left and right spaces.
 
-    if (menu_choice_number.strip() == '1'): 
+    if (menu_choice_number == '1'): 
         pass
-        #func1()
 
-    elif (menu_choice_number.strip() == '2'):
+    elif (menu_choice_number == '2'):
         pass
-        #func2()
 
-    elif (menu_choice_number.strip() == '3'):
+    elif (menu_choice_number == '3'):
         pass
-        #func3()
 
-    elif (menu_choice_number.strip() == '4'):
+    elif (menu_choice_number == '4'):
         pass
-        #func4()
 
-    elif (menu_choice_number.strip() == '5'):
-        book.book_menu(sql_connection.mycursor, sql_connection.mydb)
+    elif (menu_choice_number == '5'):
+        book.book_menu(sql_connection.mycursor, sql_connection.mydb) # We pass the database related variables to the book module
 
-    elif (menu_choice_number.strip() == '6'):
-        student.student_menu(sql_connection.mycursor, sql_connection.mydb)
+    elif (menu_choice_number == '6'):
+        student.student_menu(sql_connection.mycursor, sql_connection.mydb) # We pass the database related variables to the student module
 
-    elif (menu_choice_number.strip() == '7'):
+    elif (menu_choice_number == '7'):
+
         sql_connection.mydb.commit() # Saves all changes to database
         print('\nThank you. Have a great day :)\n')
-        time.sleep(3) # This gives a 3 second lag and stops the program from directly exiting so that the user can see the thank you message
         exit_status = True
 
-    elif (menu_choice_number.strip() == '8'):
+    elif (menu_choice_number == '8'):
         pass
-        #func7()
 
     else :
         print('Invalid option selected.')

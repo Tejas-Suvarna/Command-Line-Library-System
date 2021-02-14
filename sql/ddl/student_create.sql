@@ -1,5 +1,5 @@
-DROP TABLE IF EXIST student;
-CREATE TABLE student (
+DROP TABLE IF EXIST school.student;
+CREATE TABLE school.student (
 	student_id INTEGER NOT NULL AUTO_INCREMENT , -- Unique student_id that is auto-generated and auto-incremented
 	full_name VARCHAR(40) NOT NULL ,
 	class VARCHAR(2) NOT NULL ,

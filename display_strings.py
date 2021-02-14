@@ -25,3 +25,12 @@ Choose an option from the main menu:
 8. Help
 '''
 
+student_menu_text = '''
+Student Menu
+============
+1. Add new student
+2. Delete student
+3. Display all students
+'''
+
+hit_enter_text = '\nPress Enter to continue'

@@ -1,10 +1,9 @@
-import mysql.connector # Library to connect Python to MySQL
 import time # Used for the sleep function while exiting the program
 
+import sql_connection
 import display_strings # Contains string variables with multiline text
+import student
 
-# Database connection to the MySQL "school" database
-mydb = mysql.connector.connect(host="localhost", user="root", passwd="173-Balenp%%5690", auth_plugin='mysql_native_password', database='school')
 
 menu_choice_number = '' # The user choice in the main menu
 exit_status = False # Flag indicating if user chose to exit
@@ -34,11 +33,11 @@ while(exit_status == False):
         pass
         #func5()
     elif (menu_choice_number.strip() == '6'):
-        pass
-        #func6()
+        student.student_menu(sql_connection.mycursor)
     elif (menu_choice_number.strip() == '7'):
+        sql_connection.mydb.commit() # Saves all changes
         print('\nThank you. Have a great day :)\n')
-        time.sleep(3)
+        time.sleep(3) # This gives a 3 second lag and stops the program from directly exiting so that the user can see the thank you message
         exit_status = True
     elif (menu_choice_number.strip() == '8'):
         pass

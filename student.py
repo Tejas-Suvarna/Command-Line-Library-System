@@ -8,26 +8,45 @@ def is_student_data_correct(student_data):
 
     (student_name, student_class, student_dob) = student_data # Unpack tuple student data
 
+    # Student name validation
     # Checks the length of the student full_name
     if (len(student_name) > 40 or len(student_name) == 0):
         print('Please enter a name with 40 characters. ')
         return False
 
+    # Checks if student name contains characters other than alphabets, spaces and periods
+    if (not student_name != '' and all(chr.isalpha() or chr.isspace() or chr == '.' for chr in student_name)):
+        print('Student can only have alphabets, spaces and periods(.)')
+
+    # Student class validation
+    # Checks the length of the student class
     if (len(student_class) > 2 or len(student_class) == 0):
         print('Please enter a valid class')
         return False
 
+    # Checks if the student class is a number or not
     if (not student_class.isnumeric()):
         print('Please enter a valid class number')
         return False
-
-    if (len(student_dob) != 10):
-        print('Please enter data in the format (dd-mm-yyyy)')
-        return False
     
+    # Checks whether the student class is in range 1 to 12
     if (int(student_class) > 12 or int(student_class) == 0):
         print('Enter a class that is from 1 to 12.')
         return False
+
+    # Student DOB validation
+    # Checks the length of DOB
+    if (len(student_dob) != 10):
+        print('Please enter data in the format (dd-mm-yyyy)')
+        return False
+
+    # To check if date is in dd-mm-yyyy format
+    import datetime
+    try:
+        datetime.datetime.strptime(student_dob, '%d-%m-%Y')
+    except ValueError:
+        print('Please enter data in the format (dd-mm-yyyy)')
+    
 
     return True # The data is correct
 
@@ -73,7 +92,7 @@ def create_student(mycursor, mydb): # The function receives the database cursor 
         print('Check the data you\'ve entered.')
         _ = input(display_strings.hit_enter_text) # This helps to persist the output for the user to see
         return
-        
+    
     # Inserts details to database
     insert_student_query = "INSERT INTO student (full_name, class, dob) VALUES (%s, %s, %s)"
     val = (student_name.strip(), student_class.strip(), student_dob.strip())

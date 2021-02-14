@@ -31,6 +31,7 @@ Student Menu
 1. Add new student
 2. Delete student
 3. Display all students
+4. Go to main menu
 '''
 
 hit_enter_text = '\nPress Enter to continue'

@@ -1,30 +1,31 @@
 import display_strings
-student_menu_choice_number = ''
-# Stores the database cursor
-dbcursor = None
 
+dbcursor = None # Stores the database cursor
+db = None # Stores the database connection
+
+# Function checks if entered student data is valid or not
 def is_student_data_correct(student_data):
 
     (student_name, student_class, student_dob) = student_data # Unpack tuple student data
 
     # Checks the length of the student full_name
-    if(len(student_name) > 40 or len(student_name) == 0):
+    if (len(student_name) > 40 or len(student_name) == 0):
         print('Please enter a name with 40 characters. ')
         return False
 
-    if(len(student_class) > 2 or len(student_class) == 0):
+    if (len(student_class) > 2 or len(student_class) == 0):
         print('Please enter a valid class')
         return False
 
-    if(not student_class.isnumeric()):
+    if (not student_class.isnumeric()):
         print('Please enter a valid class number')
         return False
 
-    if(len(student_dob) != 10):
+    if (len(student_dob) != 10):
         print('Please enter data in the format (dd-mm-yyyy)')
         return False
     
-    if(int(student_class) > 12 or int(student_class) == 0):
+    if (int(student_class) > 12 or int(student_class) == 0):
         print('Enter a class that is from 1 to 12.')
         return False
 
@@ -32,24 +33,33 @@ def is_student_data_correct(student_data):
 
 
 # Displays student menu
-def student_menu(mycursor):
+def student_menu(mycursor, mydb):
 
     dbcursor = mycursor # Initialize database cursor
+    db = mydb
 
     print(display_strings.student_menu_text) # Displays student menu
     student_menu_choice_number = input('Enter your choice: ')
     
     if (student_menu_choice_number.strip() == '1'): 
-        create_student(dbcursor) # Function to inserts a new student and the details into the database
+        create_student(dbcursor, db) # Function to inserts a new student and the details into the database
+
     elif (student_menu_choice_number.strip() == '2'):
+        delete_student(dbcursor, db) # Function to delete student of a particular student ID from the database
+
+    elif (student_menu_choice_number.strip() == '3'):
         pass
-        #func2()
+        #func3()
+
+    elif (student_menu_choice_number.strip() == '4'):
+        return
+
     else:
         print('Invalid option selected.\n')
 
 
 # This function inserts a new student and the details into the database
-def create_student(mycursor): # The function receives the database cursor parameter
+def create_student(mycursor, mydb): # The function receives the database cursor parameter
 
     # Accepts student details from user
     print('Student details\n---------------')
@@ -77,5 +87,43 @@ def create_student(mycursor): # The function receives the database cursor parame
     student_id_result = mycursor.fetchone()
     print('The new student ID is', student_id_result[0])
 
+    mydb.commit() # Saves all changes to database
+
     _ = input(display_strings.hit_enter_text) # This helps to persist the output for the user to see
 
+def delete_student(mycursor, mydb):
+
+    all_student_ids = []
+
+    # Accepts student ID from user whose entry needs to be deleted
+    student_id_to_delete = input('Enter the ID of student to be deleted: ')
+
+    # Fetches all student IDs for validation
+    get_student_ids_query = 'SELECT student_id FROM student;'
+    mycursor.execute(get_student_ids_query)
+    myresult = mycursor.fetchall()
+
+    # Stores all student IDs in a list
+    for x in myresult:
+        all_student_ids.append(x[0])
+
+
+    # Validation of the user entered student ID
+    if (not student_id_to_delete.isnumeric()):
+        print('Please enter a numeric student ID.')
+        _ = input(display_strings.hit_enter_text) # This helps to persist the output for the user to see
+        return
+    
+    if (int(student_id_to_delete) not in all_student_ids):
+        print('Entered student ID doesn\'t exist in the database.')
+        _ = input(display_strings.hit_enter_text) # This helps to persist the output for the user to see
+        return
+
+    # Deleting the student with a student ID entered by user
+    delete_student_query = 'DELETE FROM student WHERE student_id = ' + student_id_to_delete
+    mycursor.execute(delete_student_query)
+    print(mycursor.rowcount, "record(s) deleted")
+
+    mydb.commit() # Saves all changes to database
+
+    _ = input(display_strings.hit_enter_text) # This helps to persist the output for the user to see

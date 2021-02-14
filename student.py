@@ -48,8 +48,7 @@ def student_menu(mycursor, mydb):
         delete_student(dbcursor, db) # Function to delete student of a particular student ID from the database
 
     elif (student_menu_choice_number.strip() == '3'):
-        pass
-        #func3()
+        display_all_students(dbcursor, db) # Function to display all students from database
 
     elif (student_menu_choice_number.strip() == '4'):
         return
@@ -64,7 +63,7 @@ def create_student(mycursor, mydb): # The function receives the database cursor 
     # Accepts student details from user
     print('Student details\n---------------')
     student_name = input('Enter the student full name (40 characters max): ')
-    student_class = input('Enter the class of the student (1,2,...,10): ')
+    student_class = input('Enter the class of the student (1,2,...,10,11,12): ')
     student_dob = input('Enter the date of birth of the student (dd-mm-yyyy): ')
 
     # Check student data
@@ -125,5 +124,30 @@ def delete_student(mycursor, mydb):
     print(mycursor.rowcount, "record(s) deleted")
 
     mydb.commit() # Saves all changes to database
+
+    _ = input(display_strings.hit_enter_text) # This helps to persist the output for the user to see
+
+# Displays all students from database
+def display_all_students(mycursor, mydb):
+
+    # Displays all student data
+    latest_student_id_query = "SELECT student_id, full_name, class, dob FROM student;"
+    mycursor.execute(latest_student_id_query)
+    all_students = mycursor.fetchall()
+
+    print(display_strings.student_details_header, end='') # Displays a nice student details heading. We add an end='' since the student_details_header already has a new line
+
+    for student in all_students:
+        
+        # Extracting student data from tuple
+        student_id = student[0]
+        student_full_name = student[1]
+        student_class = student[2]
+        student_dob = student[3]
+
+        # Prints row of student detail in an organized row
+        print('| %4s | %29s | %5s | %11s |' % (student_id, student_full_name, student_class, student_dob))
+
+    print(display_strings.student_details_footer) # Displays a student details footer
 
     _ = input(display_strings.hit_enter_text) # This helps to persist the output for the user to see

@@ -1,3 +1,9 @@
+# ---------------------------- General strings ----------------------------
+
+hit_enter_text = '\nPress Enter to continue'
+
+# ---------------------------- String related to main file ----------------------------
+
 # ASCII text pattern generator from link https://manytools.org/hacker-tools/ascii-banner/   Font = Stop
 welcome_message = '''
  _ _ _                                                               
@@ -25,6 +31,8 @@ Choose an option from the main menu:
 8. Help
 '''
 
+# ---------------------------- String related to student file ----------------------------
+
 student_menu_text = '''
 Student Menu
 ============
@@ -34,4 +42,12 @@ Student Menu
 4. Go to main menu
 '''
 
-hit_enter_text = '\nPress Enter to continue'
+student_details_header = '''
+==============================================================
+********************   STUDENT DETAILS   *********************
+==============================================================
+|  ID  |           Full Name           | Class |     DOB     |
+==============================================================
+'''
+
+student_details_footer = '=============================================================='

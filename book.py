@@ -31,7 +31,8 @@ def is_book_data_correct(book_data):
 # Displays book menu
 def book_menu(mycursor, mydb):
 
-    dbcursor = mycursor # Initialize database cursor
+    # Initialize database variables
+    dbcursor = mycursor
     db = mydb
 
     print(display_strings.book_menu_text) # Displays book menu
@@ -99,22 +100,19 @@ def delete_book(mycursor, mydb):
     book_id_to_delete = input('Enter the ID of book to be deleted: ')
 
     # Fetches all book IDs for validation
-    get_book_ids_query = 'SELECT book_id FROM book;'
-    mycursor.execute(get_book_ids_query)
-    result_book_ids = mycursor.fetchall()
-
-    # Stores all book IDs in a list
-    for id in result_book_ids:
-        all_book_ids.append(id[0])
+    get_book_ids_query = 'SELECT book_id FROM book WHERE book_id = %s;'
+    val = (book_id_to_delete,)
+    mycursor.execute(get_book_ids_query, val)
+    
+    # Query to check if the book with book_id exists. If query returns 0 rows, then we notify the user that that book doesn't exist to delete
+    if (mycursor.rowcount == 0 ):
+        print('The book with book_id',book_id_to_delete,'does not exist.')
+        _ = input(display_strings.hit_enter_text) # This helps to persist the output for the user to see
+        return    
 
     # Validation of the user entered book ID
     if (not book_id_to_delete.isnumeric()):
         print('Please enter a numeric book ID.')
-        _ = input(display_strings.hit_enter_text) # This helps to persist the output for the user to see
-        return
-    
-    if (int(book_id_to_delete) not in all_book_ids):
-        print('Entered book ID doesn\'t exist in the database.')
         _ = input(display_strings.hit_enter_text) # This helps to persist the output for the user to see
         return
 

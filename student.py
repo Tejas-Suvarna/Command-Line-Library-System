@@ -53,7 +53,8 @@ def is_student_data_correct(student_data):
 # Displays student menu
 def student_menu(mycursor, mydb):
 
-    dbcursor = mycursor # Initialize database cursor
+    # Initialize database variables
+    dbcursor = mycursor
     db = mydb
 
     print(display_strings.student_menu_text) # Displays student menu
@@ -120,27 +121,23 @@ def delete_student(mycursor, mydb):
     # Accepts student ID from user whose entry needs to be deleted
     student_id_to_delete = input('Enter the ID of student to be deleted: ')
 
-    # Fetches all student IDs for validation
-    get_student_ids_query = 'SELECT student_id FROM student;'
-    mycursor.execute(get_student_ids_query)
-    result_student_ids = mycursor.fetchall()
-
-    # Stores all student IDs in a list
-    for id in result_student_ids:
-        all_student_ids.append(id[0])
-
     # Validation of the user entered student ID
     if (not student_id_to_delete.isnumeric()):
         print('Please enter a numeric student ID.')
         _ = input(display_strings.hit_enter_text) # This helps to persist the output for the user to see
         return
-    
-    if (int(student_id_to_delete) not in all_student_ids):
-        print('Entered student ID doesn\'t exist in the database.')
-        _ = input(display_strings.hit_enter_text) # This helps to persist the output for the user to see
-        return
 
-    # Deleting the student with a student ID entered by user
+    # Fetches all student IDs for validation
+    get_student_ids_query = 'SELECT student_id FROM student WHERE student_id = %s;'
+    val = (student_id_to_delete,)
+    mycursor.execute(get_student_ids_query, val)
+    
+    # Query to check if the student with student_id exists. If query returns 0 rows, then we notify the user that that student doesn't exist to delete
+    if (mycursor.rowcount == 0 ):
+        print('The student with student_id',student_id_to_delete,'does not exist.')
+        _ = input(display_strings.hit_enter_text) # This helps to persist the output for the user to see
+        return      
+
     delete_student_query = 'DELETE FROM student WHERE student_id = ' + student_id_to_delete
     mycursor.execute(delete_student_query)
     print(mycursor.rowcount, "record(s) deleted")

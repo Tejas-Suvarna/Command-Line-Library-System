@@ -3,6 +3,7 @@ import display_strings  # Contains string variables with multiline text
 
 import student
 import book
+import student_book
 
 exit_status = False # Flag indicating if user chose to exit
 
@@ -16,10 +17,10 @@ while(exit_status == False):
     menu_choice_number = input('Enter your choice: ').strip() # Stores the user choice, strip() removes left and right spaces.
 
     if (menu_choice_number == '1'): 
-        pass
+        student_book.issue_book_to_student(sql_connection.mycursor, sql_connection.mydb) # Creates a student book ID entry in student_book_issue tablke.
 
     elif (menu_choice_number == '2'):
-        pass
+        student_book.returning_book(sql_connection.mycursor, sql_connection.mydb) # Displays the number of days the student took to return the book and updates return_date
 
     elif (menu_choice_number == '3'):
         pass

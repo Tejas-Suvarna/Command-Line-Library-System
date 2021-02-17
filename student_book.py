@@ -12,6 +12,31 @@ def issue_book_to_student(mycursor, mydb):
     student_id = input('Enter student ID: ')
     book_id = input('Enter book ID: ')
 
+    # Check if student_id and book_id are numeric values
+    if ( not student_id.isnumeric() or not book_id.isnumeric() ):
+        print('One if the ID you have entered is not numeric and is incorrect.')
+        _ = input(display_strings.hit_enter_text) # This helps to persist the output for the user to see
+        return
+
+    # Checks if student with student_id exist
+    check_if_student_exists_query = "SELECT * FROM student WHERE student_id=%s;"
+    val = (student_id,)
+    mycursor.execute(check_if_student_exists_query, val)
+    if (mycursor.rowcount == 0):
+        print('Student with student_id',student_id,'does not exist.')
+        _ = input(display_strings.hit_enter_text) # This helps to persist the output for the user to see
+        return
+
+    # Checks if book with book_id exist
+    check_if_book_exists_query = "SELECT * FROM book WHERE book_id=%s;"
+    val = (book_id,)
+    mycursor.execute(check_if_book_exists_query, val)
+    print(mycursor.rowcount)
+    if (mycursor.rowcount == 0):
+        print('Book with book_id',book_id,'does not exist.')
+        _ = input(display_strings.hit_enter_text) # This helps to persist the output for the user to see
+        return
+
     # Checks if student has a pending book
     student_book_pending_query = "SELECT * FROM student_book_issue WHERE student_id=%s AND return_date IS NULL;"
     val = (student_id,)
@@ -61,10 +86,10 @@ def returning_book(mycursor, mydb):
         return
 
     # Adds return date to the entry
-    update_student_book_issue_query = "UPDATE student_book_issue SET return_date=CURDATE() WHERE student_id=%s AND book_id=%s return_date IS NULL;"
+    update_student_book_issue_query = "UPDATE student_book_issue SET return_date=CURDATE() WHERE student_id=%s AND book_id=%s AND return_date IS NULL;"
     val = (student_id, book_id)
     mycursor.execute(update_student_book_issue_query, val)
-    print(mycursor.rowcount, "record inserted.")
+    print(mycursor.rowcount, "record updated.")
 
     mydb.commit() # Saves all changes to database
 

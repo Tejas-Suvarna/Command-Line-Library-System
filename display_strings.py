@@ -27,8 +27,8 @@ Choose an option from the main menu:
 4. Display students past due date
 5. Book management
 6. Student management
-7. Exit
-8. Help
+7. Help
+8. Exit
 '''
 
 # ---------------------------- String related to student file ----------------------------

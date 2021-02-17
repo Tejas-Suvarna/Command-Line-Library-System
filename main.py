@@ -35,13 +35,12 @@ while(exit_status == False):
         student.student_menu(sql_connection.mycursor, sql_connection.mydb) # We pass the database related variables to the student module
 
     elif (menu_choice_number == '7'):
+        pass
 
+    elif (menu_choice_number == '8'):
         sql_connection.mydb.commit() # Saves all changes to database
         print('\nThank you. Have a great day :)\n')
         exit_status = True
-
-    elif (menu_choice_number == '8'):
-        pass
 
     else :
         print('Invalid option selected.')

@@ -92,6 +92,7 @@ def create_student(mycursor, mydb): # The function receives the database cursor 
     # Check student data
     student_data = (student_name, student_class, student_dob) # Pack the student data into a tuple
 
+    # Checks whether the student data is correct
     if not is_student_data_correct(student_data):
         print('Check the data you\'ve entered.')
         _ = input(display_strings.hit_enter_text) # This helps to persist the output for the user to see

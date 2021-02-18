@@ -1,13 +1,7 @@
 import display_strings
-
-dbcursor = None # Stores the database cursor
-db = None # Stores the database connection
+import book_issue_query
 
 def issue_book_to_student(mycursor, mydb):
-    
-    # Initialize database variables
-    dbcursor = mycursor 
-    db = mydb
 
     student_id = input('Enter student ID: ')
     book_id = input('Enter book ID: ')
@@ -31,7 +25,6 @@ def issue_book_to_student(mycursor, mydb):
     check_if_book_exists_query = "SELECT * FROM book WHERE book_id=%s;"
     val = (book_id,)
     mycursor.execute(check_if_book_exists_query, val)
-    print(mycursor.rowcount)
     if (mycursor.rowcount == 0):
         print('Book with book_id',book_id,'does not exist.')
         _ = input(display_strings.hit_enter_text) # This helps to persist the output for the user to see
@@ -41,7 +34,6 @@ def issue_book_to_student(mycursor, mydb):
     student_book_pending_query = "SELECT * FROM student_book_issue WHERE student_id=%s AND return_date IS NULL;"
     val = (student_id,)
     mycursor.execute(student_book_pending_query, val)
-    print(mycursor.rowcount)
     if (mycursor.rowcount != 0):
         print('Student already has a book pending to be returned.')
         _ = input(display_strings.hit_enter_text) # This helps to persist the output for the user to see
@@ -51,7 +43,6 @@ def issue_book_to_student(mycursor, mydb):
     check_book_availability_query = "SELECT * FROM student_book_issue WHERE book_id=%s AND return_date IS NULL;"
     val = (book_id,)
     mycursor.execute(check_book_availability_query, val)
-    print(mycursor.rowcount)
     if (mycursor.rowcount != 0):
         print('The book is taken by another user.')
         _ = input(display_strings.hit_enter_text) # This helps to persist the output for the user to see
@@ -70,19 +61,16 @@ def issue_book_to_student(mycursor, mydb):
 
 def returning_book(mycursor, mydb):
 
-    # Initialize database variables
-    dbcursor = mycursor 
-    db = mydb
-
     student_id = input('Enter student ID: ')
     book_id = input('Enter book ID: ')
 
     # Check if student_id book_id pair exists
-    student_book_id_query = "SELECT 1 FROM student_book_issue WHERE student_id=%s AND book_id=%s return_date IS NULL "
+    student_book_id_query = "SELECT 1 FROM student_book_issue WHERE student_id=%s AND book_id=%s AND return_date IS NULL "
     val = (student_id, book_id)
     mycursor.execute(student_book_id_query, val)
-    if (mycursor.rowcount != 0):
+    if (mycursor.rowcount == 0):
         print('Incorrect student ID or book ID. No such combination found.')
+        _ = input(display_strings.hit_enter_text) # This helps to persist the output for the user to see
         return
 
     # Adds return date to the entry
@@ -96,3 +84,30 @@ def returning_book(mycursor, mydb):
     _ = input(display_strings.hit_enter_text) # This helps to persist the output for the user to see
 
 
+def display_issue_history(mycursor, mydb):
+
+    # Displays all student book issue history
+    student_book_issue_history_query = book_issue_query.student_book_issue_history_query
+    mycursor.execute(student_book_issue_history_query)
+    history = mycursor.fetchall()
+
+    print(display_strings.issue_history_details_header, end='') # Displays a issue history heading. We add an end='' since the issue_history_details_footer already has a new line
+
+    for row in history:
+        
+        # Extracting issue history data from tuple
+        student_id = row[0]
+        student_name = row[1]
+        book_id = row[2]
+        book_title = row[3]
+        issue_date = row[4]
+        to_be_returned_date = row[5]
+        returned_date = row[6]
+        days_due = row[7]
+
+        # Prints row of issue history in an organized row
+        print('| %10s | %25s | %7s | %20s | %10s | %19s | %16s | %8s |' % (student_id, student_name, book_id, book_title, issue_date, to_be_returned_date, returned_date, days_due))
+
+    print(display_strings.issue_history_details_footer) # Displays a book details footer
+
+    _ = input(display_strings.hit_enter_text) # This helps to persist the output for the user to see

@@ -31,10 +31,6 @@ def is_book_data_correct(book_data):
 # Displays book menu
 def book_menu(mycursor, mydb):
 
-    # Initialize database variables
-    dbcursor = mycursor
-    db = mydb
-
     print(display_strings.book_menu_text) # Displays book menu
     book_menu_choice_number = input('Enter your choice: ')
     
@@ -94,8 +90,6 @@ def create_book(mycursor, mydb): # The function receives the database cursor par
 # Deletes a book which has a book ID specified by user
 def delete_book(mycursor, mydb):
 
-    all_book_ids = []
-
     # Accepts book ID from user whose entry needs to be deleted
     book_id_to_delete = input('Enter the ID of book to be deleted: ')
 
@@ -134,7 +128,7 @@ def display_all_books(mycursor, mydb):
     mycursor.execute(latest_book_id_query)
     all_books = mycursor.fetchall()
 
-    print(display_strings.book_details_header, end='') # Displays a book book details heading. We add an end='' since the book_details_header already has a new line
+    print(display_strings.book_details_header, end='') # Displays a book details heading. We add an end='' since the book_details_header already has a new line
 
     for book in all_books:
         

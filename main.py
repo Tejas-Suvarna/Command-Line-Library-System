@@ -23,7 +23,7 @@ while(exit_status == False):
         student_book.returning_book(sql_connection.mycursor, sql_connection.mydb) # Displays the number of days the student took to return the book and updates return_date
 
     elif (menu_choice_number == '3'):
-        pass
+        student_book.display_issue_history(sql_connection.mycursor, sql_connection.mydb) # Displays the issue history
 
     elif (menu_choice_number == '4'):
         pass

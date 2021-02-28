@@ -35,13 +35,13 @@ def book_menu(mycursor, mydb):
     book_menu_choice_number = input('Enter your choice: ')
     
     if (book_menu_choice_number.strip() == '1'): 
-        create_book(dbcursor, db) # Function to inserts a new book and the details into the database
+        create_book(mycursor, mydb) # Function to inserts a new book and the details into the database
 
     elif (book_menu_choice_number.strip() == '2'):
-        delete_book(dbcursor, db) # Function to delete book of a particular book ID from the database
+        delete_book(mycursor, mydb) # Function to delete book of a particular book ID from the database
 
     elif (book_menu_choice_number.strip() == '3'):
-        display_all_books(dbcursor, db) # Function to display all books from database
+        display_all_books(mycursor, mydb) # Function to display all books from database
 
     elif (book_menu_choice_number.strip() == '4'): 
         return # Does not do anything. Returns to main menu
@@ -75,7 +75,7 @@ def create_book(mycursor, mydb): # The function receives the database cursor par
     insert_book_query = "INSERT INTO book (title, author, published_year) VALUES (%s, %s, %s)"
     val = (book_title, book_author, book_published_year)
     mycursor.execute(insert_book_query, val)
-    print(mycursor.rowcount, "record inserted.")
+    print(mycursor.rowcount, "record inserted.") # mycursor contains the rowcount field which has the count of rows affected
 
     # Displays the new book ID
     latest_book_id_query = "SELECT MAX(book_id) FROM book;"
@@ -93,6 +93,12 @@ def delete_book(mycursor, mydb):
     # Accepts book ID from user whose entry needs to be deleted
     book_id_to_delete = input('Enter the ID of book to be deleted: ')
 
+    # Validation of the user entered book ID
+    if (not book_id_to_delete.isnumeric()):
+        print('Please enter a numeric book ID.')
+        _ = input(display_strings.hit_enter_text) # This helps to persist the output for the user to see
+        return
+
     # Fetches all book IDs for validation
     get_book_ids_query = 'SELECT book_id FROM book WHERE book_id = %s;'
     val = (book_id_to_delete,)
@@ -104,16 +110,10 @@ def delete_book(mycursor, mydb):
         _ = input(display_strings.hit_enter_text) # This helps to persist the output for the user to see
         return    
 
-    # Validation of the user entered book ID
-    if (not book_id_to_delete.isnumeric()):
-        print('Please enter a numeric book ID.')
-        _ = input(display_strings.hit_enter_text) # This helps to persist the output for the user to see
-        return
-
     # Deleting the book with a book ID entered by user
     delete_book_query = 'DELETE FROM book WHERE book_id = ' + book_id_to_delete
     mycursor.execute(delete_book_query)
-    print(mycursor.rowcount, "record(s) deleted")
+    print(mycursor.rowcount, "record(s) deleted") # mycursor contains the rowcount field which has the count of rows affected
 
     mydb.commit() # Saves all changes to database
 

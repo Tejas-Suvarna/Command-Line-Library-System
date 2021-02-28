@@ -52,7 +52,7 @@ def issue_book_to_student(mycursor, mydb):
     insert_student_book_issue_query = "INSERT INTO student_book_issue (student_id, book_id, issue_date) VALUES (%s, %s, CURDATE())"
     val = (student_id, book_id)
     mycursor.execute(insert_student_book_issue_query, val)
-    print(mycursor.rowcount, "record inserted.")
+    print(mycursor.rowcount, "record inserted.") # mycursor contains the rowcount field which has the count of rows affected
 
     mydb.commit() # Saves all changes to database
 
@@ -77,7 +77,7 @@ def returning_book(mycursor, mydb):
     update_student_book_issue_query = "UPDATE student_book_issue SET return_date=CURDATE() WHERE student_id=%s AND book_id=%s AND return_date IS NULL;"
     val = (student_id, book_id)
     mycursor.execute(update_student_book_issue_query, val)
-    print(mycursor.rowcount, "record updated.")
+    print(mycursor.rowcount, "record updated.") # mycursor contains the rowcount field which has the count of rows affected
 
     mydb.commit() # Saves all changes to database
 
@@ -108,6 +108,34 @@ def display_issue_history(mycursor, mydb):
         # Prints row of issue history in an organized row
         print('| %10s | %25s | %7s | %20s | %10s | %19s | %16s | %8s |' % (student_id, student_name, book_id, book_title, issue_date, to_be_returned_date, returned_date, days_due))
 
-    print(display_strings.issue_history_details_footer) # Displays a book details footer
+    print(display_strings.issue_history_details_footer) # Displays a issue history details footer
+
+    _ = input(display_strings.hit_enter_text) # This helps to persist the output for the user to see
+
+
+def display_students_past_due_date(mycursor, mydb):
+
+    # Displays students past due date
+    student_past_due_date_query = book_issue_query.student_past_due_date_query
+    mycursor.execute(student_past_due_date_query)
+    student_past_due = mycursor.fetchall()
+
+    print(display_strings.students_past_due_date_header, end='') # Displays a students past due date heading. We add an end='' since the issue_history_details_footer already has a new line
+
+    for row in student_past_due:
+        
+        # Extracting students past due date data from tuple
+        student_id = row[0]
+        student_name = row[1]
+        book_id = row[2]
+        book_title = row[3]
+        issue_date = row[4]
+        to_be_returned_date = row[5]
+        days_due = row[6]
+
+        # Prints row of students past due date in an organized row
+        print('| %10s | %25s | %7s | %20s | %10s | %19s | %8s |' % (student_id, student_name, book_id, book_title, issue_date, to_be_returned_date, days_due))
+
+    print(display_strings.students_past_due_date_footer) # Displays a students past due date footer
 
     _ = input(display_strings.hit_enter_text) # This helps to persist the output for the user to see

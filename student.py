@@ -1,9 +1,10 @@
+from re import A
 import display_strings
 
 dbcursor = None # Stores the database cursor
 db = None # Stores the database connection
 
-# Function checks if entered student data is valid or not
+# Function checks if entered student data is valid or not (Utitlity function)
 def is_student_data_correct(student_data):
 
     (student_name, student_class, student_dob) = student_data # Unpack tuple student data
@@ -50,7 +51,7 @@ def is_student_data_correct(student_data):
     return True # The data is correct
 
 
-# Displays student menu
+# Displays student menu (MAIN)
 def student_menu(mycursor, mydb):
 
     # Initialize database variables
@@ -102,12 +103,12 @@ def create_student(mycursor, mydb): # The function receives the database cursor 
     insert_student_query = "INSERT INTO student (full_name, class, dob) VALUES (%s, %s, %s)"
     val = (student_name, student_class, student_dob)
     mycursor.execute(insert_student_query, val)
-    print(mycursor.rowcount, "record inserted.")
+    print(mycursor.rowcount, "record inserted.") # mycursor contains the rowcount field which has the count of rows affected
 
     # Displays the new student ID
     latest_student_id_query = "SELECT MAX(student_id) FROM student;"
     mycursor.execute(latest_student_id_query)
-    student_id_result = mycursor.fetchone()
+    student_id_result = mycursor.fetchone() # It fetches one row
     print('The new student ID is', student_id_result[0])
 
     mydb.commit() # Saves all changes to database
@@ -116,8 +117,6 @@ def create_student(mycursor, mydb): # The function receives the database cursor 
 
 # Deletes a student which has a student ID specified by user
 def delete_student(mycursor, mydb):
-
-    all_student_ids = []
 
     # Accepts student ID from user whose entry needs to be deleted
     student_id_to_delete = input('Enter the ID of student to be deleted: ')
@@ -141,7 +140,7 @@ def delete_student(mycursor, mydb):
 
     delete_student_query = 'DELETE FROM student WHERE student_id = ' + student_id_to_delete
     mycursor.execute(delete_student_query)
-    print(mycursor.rowcount, "record(s) deleted")
+    print(mycursor.rowcount, "record(s) deleted") # mycursor contains the rowcount field which has the count of rows affected
 
     mydb.commit() # Saves all changes to database
 

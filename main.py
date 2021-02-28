@@ -26,7 +26,7 @@ while(exit_status == False):
         student_book.display_issue_history(sql_connection.mycursor, sql_connection.mydb) # Displays the issue history
 
     elif (menu_choice_number == '4'):
-        pass
+        student_book.display_students_past_due_date(sql_connection.mycursor, sql_connection.mydb) # Displays the students past due date data
 
     elif (menu_choice_number == '5'):
         book.book_menu(sql_connection.mycursor, sql_connection.mydb) # We pass the database related variables to the book module
@@ -35,9 +35,6 @@ while(exit_status == False):
         student.student_menu(sql_connection.mycursor, sql_connection.mydb) # We pass the database related variables to the student module
 
     elif (menu_choice_number == '7'):
-        pass
-
-    elif (menu_choice_number == '8'):
         sql_connection.mydb.commit() # Saves all changes to database
         print('\nThank you. Have a great day :)\n')
         exit_status = True
